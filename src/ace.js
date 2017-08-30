@@ -27,9 +27,10 @@ export default class ReactAce extends Component {
       defaultValue,
       cursorStart,
       showGutter,
+      showLineNumbers,
       wrapEnabled,
       showPrintMargin,
-      scrollMargin = [ 0, 0, 0, 0],
+      scrollMargin = [0, 0, 0, 0],
       keyboardHandler,
       onLoad,
       commands,
@@ -54,6 +55,7 @@ export default class ReactAce extends Component {
     this.editor.setFontSize(fontSize);
     this.editor.setValue(defaultValue === undefined ? value : defaultValue, cursorStart);
     this.editor.renderer.setShowGutter(showGutter);
+    this.editor.renderer.setOption('showLineNumbers', showLineNumbers);
     this.editor.getSession().setUseWrapMode(wrapEnabled);
     this.editor.setShowPrintMargin(showPrintMargin);
     this.editor.on('focus', this.onFocus);
@@ -70,7 +72,7 @@ export default class ReactAce extends Component {
     }
     this.editor.session.on('changeScrollTop', this.onScroll);
     this.editor.getSession().setAnnotations(annotations || []);
-    if(markers && markers.length > 0){
+    if (markers && markers.length > 0) {
       this.handleMarkers(markers);
     }
 
@@ -157,6 +159,9 @@ export default class ReactAce extends Component {
     if (nextProps.showGutter !== oldProps.showGutter) {
       this.editor.renderer.setShowGutter(nextProps.showGutter);
     }
+    if (nextProps.showLineNumbers !== oldProps.showLineNumbers) {
+      this.editor.renderer.setOption('showLineNumbers', nextProps.showLineNumbers);
+    }
     if (!isEqual(nextProps.setOptions, oldProps.setOptions)) {
       this.handleOptions(nextProps);
     }
@@ -186,7 +191,7 @@ export default class ReactAce extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(prevProps.height !== this.props.height || prevProps.width !== this.props.width){
+    if (prevProps.height !== this.props.height || prevProps.width !== this.props.width) {
       this.editor.resize();
     }
   }
@@ -303,6 +308,7 @@ ReactAce.propTypes = {
     PropTypes.string,
   ]),
   showGutter: PropTypes.bool,
+  showLineNumbers: PropTypes.bool,
   onChange: PropTypes.func,
   onCopy: PropTypes.func,
   onPaste: PropTypes.func,
@@ -351,6 +357,7 @@ ReactAce.defaultProps = {
   value: '',
   fontSize: 12,
   showGutter: true,
+  showLineNumbers: true,
   onChange: null,
   onPaste: null,
   onLoad: null,
@@ -364,7 +371,7 @@ ReactAce.defaultProps = {
   cursorStart: 1,
   editorProps: {},
   style: {},
-  scrollMargin: [ 0, 0, 0, 0],
+  scrollMargin: [0, 0, 0, 0],
   setOptions: {},
   wrapEnabled: false,
   enableBasicAutocompletion: false,
